@@ -90,11 +90,11 @@ services:
         protocol: udp
 
   database:
-    image: postgres:13-alpine
+    image: postgres:14-alpine
     environment:
-      - POSTGRES_DB=api
-      - POSTGRES_PASSWORD=!ChangeMe!
-      - POSTGRES_USER=api-platform
+      POSTGRES_DB: api
+      POSTGRES_PASSWORD: '!ChangeMe!'
+      POSTGRES_USER: api-platform
     volumes:
       - db_data:/var/lib/postgresql/data:rw
       # you may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
@@ -104,8 +104,39 @@ services:
         published: 5432
         protocol: tcp
 
+  keycloak-database:
+    image: postgres:14-alpine
+    volumes:
+      - keycloak_db_data:/var/lib/postgresql/data:rw
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_PASSWORD: '!ChangeMe!'
+      POSTGRES_USER: keycloak
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:legacy
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: keycloak-database
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_SCHEMA: public
+      DB_PASSWORD: '!ChangeMe!'
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: Pa55w0rd
+    ports:
+      - target: 8080
+        published: 8080
+        protocol: tcp
+      - target: 8443
+        published: 8443
+        protocol: tcp
+    depends_on:
+      - keycloak-database
+
 volumes:
   php_socket:
   db_data:
   caddy_data:
   caddy_config:
+  keycloak_db_data:
