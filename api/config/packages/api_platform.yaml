@@ -33,8 +33,7 @@ api_platform:
     oauth:
         enabled: true
         clientId: '%env(OAUTH_SWAGGER_CLIENT_ID)%'
-        # todo Enable pkce option once API Platform supports it (https://github.com/api-platform/core/issues/4646)
-        #pkce: true
+        pkce: true
         type: oauth2
         flow: authorizationCode
         tokenUrl: '%env(OAUTH_AUTH_SERVER_PUBLIC_URL)%/realms/%env(OAUTH_REALM)%/protocol/openid-connect/token'

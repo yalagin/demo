@@ -20,10 +20,6 @@ php:
     - "172.16.0.0/12"
     - "192.168.0.0/16"
   host: "chart-example.local"
-  jwt:
-    secretKey: ""
-    publicKey: ""
-    passphrase: ""
 
 pwa:
   image:
@@ -70,6 +66,19 @@ postgresql:
     requests:
       memory: 50Mi
       cpu: 50m
+
+# Full configuration: https://github.com/bitnami/charts/tree/master/bitnami/keycloak
+keycloak:
+  enabled: true
+  image:
+    registry: docker.io
+    pullPolicy: IfNotPresent
+    repository: bitnami/keycloak
+    tag: 16.1.1-debian-10-r36
+  auth:
+    createAdminUser: true
+    adminUser: user
+    adminPassword: ""
 
 external-dns:
   enabled: true

@@ -127,10 +127,9 @@ publicationDate: This value should not be null.',
 
     public function testDeleteBook(): void
     {
-        $token = $this->login();
         $client = static::createClient();
         $iri = (string) $this->findIriBy(Book::class, ['isbn' => self::ISBN]);
-        $client->request('DELETE', $iri, ['auth_bearer' => $token]);
+        $client->request('DELETE', $iri, ['auth_bearer' => 'admin@example.com']);
 
         self::assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
         self::assertNull(
@@ -205,15 +204,5 @@ publicationDate: This value should not be null.',
             '@type' => 'hydra:Collection',
             'hydra:totalItems' => $count,
         ]);
-    }
-
-    private function login(): string
-    {
-        $response = static::createClient()->request('POST', '/authentication_token', ['json' => [
-            'email' => 'admin@example.com',
-            'password' => 'admin',
-        ]]);
-
-        return $response->toArray()['token'];
     }
 }

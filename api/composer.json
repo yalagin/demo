@@ -5,13 +5,14 @@
         "php": ">=8.0",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "api-platform/core": "^2.6",
+        "api-platform/core": "^2.7@alpha",
         "composer/package-versions-deprecated": "^1.11",
         "doctrine/annotations": "^1.13",
         "doctrine/doctrine-bundle": "^2.3",
         "doctrine/doctrine-migrations-bundle": "^3.1",
         "doctrine/orm": "^2.8",
         "guzzlehttp/guzzle": "^7.4",
+        "lcobucci/jwt": "^4.1",
         "nelmio/cors-bundle": "^2.1",
         "phpdocumentor/reflection-docblock": "^5.2",
         "ramsey/uuid-doctrine": "^1.6",
@@ -23,7 +24,7 @@
         "symfony/flex": "^2.1",
         "symfony/framework-bundle": "6.1.*",
         "symfony/http-client": "6.1.*",
-        "symfony/mercure-bundle": "^0.3",
+        "symfony/mercure-bundle": "^0.3.4",
         "symfony/messenger": "6.1.*",
         "symfony/monolog-bundle": "^3.7",
         "symfony/property-access": "6.1.*",
@@ -48,7 +49,7 @@
         "symfony/stopwatch": "6.1.*",
         "symfony/var-dumper": "6.1.*",
         "symfony/web-profiler-bundle": "6.1.*",
-        "vimeo/psalm": "^4.7"
+        "vimeo/psalm": "^4.22"
     },
     "config": {
         "optimize-autoloader": true,

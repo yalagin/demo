@@ -40,3 +40,25 @@ services:
 
     App\OpenApi\OpenApiFactory:
         decorates: api_platform.openapi.factory
+
+    # Security
+    app.security.client:
+        class: Symfony\Component\HttpClient\HttpClient
+        factory: [ Symfony\Component\HttpClient\HttpClient, create ]
+        arguments:
+            $defaultOptions:
+                # Local usage only, certs provided by Caddy are self-signed
+                verify_peer: false
+                verify_host: false
+
+    Lcobucci\JWT\Configuration:
+        factory: [ App\Security\Configuration\ConfigurationFactory, createFromUri ]
+        arguments:
+            $algorithm: '%env(OAUTH_ALGORITHM)%'
+            $key: '%env(OAUTH_HTTP_PUBLIC_KEY)%'
+            $client: '@app.security.client'
+
+    App\Security\Authenticator\HttpBearerAuthenticator:
+        arguments:
+            $realmName: '%env(OAUTH_REALM)%'
+            $payloadKey: email

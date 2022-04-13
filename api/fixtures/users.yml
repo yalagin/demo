@@ -3,3 +3,7 @@ App\Entity\User:
         email: admin@example.com
         password: '\$argon2i\$v=19\$m=1024,t=2,p=2\$VDVhNGQ3aXJWOERlUjFXNA\$XbciSUQoCYR4Z9lFxyLIXumra84HJzyBzLYMB+H6cMU' # admin
         roles: [ROLE_ADMIN]
+    user:
+        email: user@example.com
+        password: '\$2y\$13\$33MifYsvQFMsT.or3wTafuJn08Y.ERtf4yu55/tewNKi9xMal4aba' # user
+        roles: [ROLE_USER]
