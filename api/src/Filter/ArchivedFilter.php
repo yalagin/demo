@@ -8,9 +8,13 @@ use ApiPlatform\Doctrine\Orm\Filter\FilterInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use App\Entity\ArchivableInterface;
 use Doctrine\ORM\QueryBuilder;
+use InvalidArgumentException;
 
 final class ArchivedFilter implements FilterInterface
 {
+    /**
+     * @var string
+     */
     private const PARAMETER_NAME = 'archived';
 
     /**
@@ -19,7 +23,7 @@ final class ArchivedFilter implements FilterInterface
     public function apply(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null, array $context = []): void
     {
         if (!is_a($resourceClass, ArchivableInterface::class, true)) {
-            throw new \InvalidArgumentException("Can't apply the Archived filter on a resource ({$resourceClass}) not implementing the ArchivableInterface.");
+            throw new InvalidArgumentException(sprintf('Can\'t apply the Archived filter on a resource (%s) not implementing the ArchivableInterface.', $resourceClass));
         }
 
         // Parameter not provided or not supported
@@ -39,7 +43,7 @@ final class ArchivedFilter implements FilterInterface
     /**
      * {@inheritdoc}
      *
-     * @return array<string, mixed>
+     * @return array{archived: array{property: string, type: string, required: false, swagger: array{description: string, name: string, type: string}, openapi: array{description: string, name: string, type: string}}}
      */
     public function getDescription(string $resourceClass): array
     {

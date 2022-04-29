@@ -242,6 +242,9 @@
     "phpdocumentor/type-resolver": {
         "version": "1.4.0"
     },
+    "phpstan/phpstan": {
+        "version": "1.6.3"
+    },
     "psr/cache": {
         "version": "2.0.0"
     },
@@ -286,6 +289,9 @@
         "files": [
             "config/packages/ramsey_uuid_doctrine.yaml"
         ]
+    },
+    "rector/rector": {
+        "version": "0.12.22"
     },
     "sebastian/comparator": {
         "version": "4.0.6"

@@ -19,7 +19,7 @@ use Symfony\Component\Security\Http\Event\CheckPassportEvent;
  */
 class UserLoaderListener implements EventSubscriberInterface
 {
-    private UserProviderInterface $userProvider;
+    private readonly UserProviderInterface $userProvider;
 
     public function __construct(UserProviderInterface $userProvider)
     {

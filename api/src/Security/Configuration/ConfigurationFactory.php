@@ -6,6 +6,9 @@ namespace App\Security\Configuration;
 
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer;
+use Lcobucci\JWT\Signer\Hmac\Sha256;
+use Lcobucci\JWT\Signer\Hmac\Sha384;
+use Lcobucci\JWT\Signer\Hmac\Sha512;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -19,10 +22,10 @@ class ConfigurationFactory
     /**
      * @var array<string, class-string<Signer>>
      */
-    public const SIGN_ALGORITHMS = [
-        'HS256' => Signer\Hmac\Sha256::class,
-        'HS384' => Signer\Hmac\Sha384::class,
-        'HS512' => Signer\Hmac\Sha512::class,
+    final public const SIGN_ALGORITHMS = [
+        'HS256' => Sha256::class,
+        'HS384' => Sha384::class,
+        'HS512' => Sha512::class,
         'ES256' => Signer\Ecdsa\Sha256::class,
         'ES384' => Signer\Ecdsa\Sha384::class,
         'ES512' => Signer\Ecdsa\Sha512::class,

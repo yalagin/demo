@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Security\Authenticator;
 
 use Lcobucci\JWT\Token;
+use Lcobucci\JWT\Token\DataSet;
+use Lcobucci\JWT\Token\Plain;
 use Lcobucci\JWT\Token\Signature;
 
 /**
@@ -18,9 +20,9 @@ class MockHttpBearerAuthenticator extends AbstractBearerAuthenticator
 {
     protected function getToken(string $data): Token
     {
-        return new Token\Plain(
-            new Token\DataSet([], ''),
-            new Token\DataSet(['email' => $data], ''),
+        return new Plain(
+            new DataSet([], ''),
+            new DataSet(['email' => $data], ''),
             new Signature('', '')
         );
     }

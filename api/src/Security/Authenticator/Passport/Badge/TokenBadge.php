@@ -19,7 +19,8 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
  */
 class TokenBadge extends UserBadge
 {
-    private Token $payload;
+    private readonly Token $payload;
+
     private ?UserInterface $user = null;
 
     public function __construct(Token $token, string $userIdentifier, callable $userLoader = null)

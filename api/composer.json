@@ -2,7 +2,7 @@
     "type": "project",
     "license": "MIT",
     "require": {
-        "php": ">=8.0",
+        "php": ">=8.1",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "api-platform/core": "^2.7@alpha",
@@ -41,6 +41,7 @@
         "api-platform/schema-generator": "^4.0",
         "hautelook/alice-bundle": "^2.9",
         "justinrainbow/json-schema": "^5.2",
+        "rector/rector": "^0.12.22",
         "symfony/browser-kit": "6.1.*",
         "symfony/css-selector": "6.1.*",
         "symfony/debug-bundle": "6.1.*",

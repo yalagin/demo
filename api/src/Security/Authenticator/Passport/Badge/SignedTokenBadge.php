@@ -15,8 +15,9 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\BadgeInterface;
  */
 class SignedTokenBadge implements BadgeInterface
 {
-    private Configuration $configuration;
-    private Token $payload;
+    private readonly Configuration $configuration;
+
+    private readonly Token $payload;
 
     public function __construct(Configuration $configuration, Token $token)
     {

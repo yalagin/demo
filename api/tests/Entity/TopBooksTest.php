@@ -6,6 +6,7 @@ namespace App\Tests\Entity;
 
 use App\Entity\TopBook;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use TypeError;
 
 class TopBooksTest extends KernelTestCase
 {
@@ -23,7 +24,7 @@ class TopBooksTest extends KernelTestCase
      */
     public function testConstructTypeError(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         new TopBook(1, 1, 1, 1, 1, 10);
     }
 }

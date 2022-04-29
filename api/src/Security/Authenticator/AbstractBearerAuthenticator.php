@@ -6,6 +6,7 @@ namespace App\Security\Authenticator;
 
 use App\Security\Authenticator\Passport\Badge\TokenBadge;
 use App\Security\Authenticator\Passport\TokenPassport;
+use Exception;
 use Lcobucci\JWT\Token;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
@@ -25,8 +26,11 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
 abstract class AbstractBearerAuthenticator implements AuthenticatorInterface, AuthenticationEntryPointInterface
 {
     protected UserProviderInterface $userProvider;
+
     protected string $realmName;
+
     protected string $payloadKey;
+
     protected LoggerInterface $logger;
 
     public function __construct(
@@ -49,21 +53,25 @@ abstract class AbstractBearerAuthenticator implements AuthenticatorInterface, Au
     {
         $response = new Response();
         $response->headers->set('WWW-Authenticate', sprintf('Bearer realm="%s"', $this->realmName));
-        $response->setStatusCode(401);
+        $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
 
         return $response;
     }
 
     public function supports(Request $request): ?bool
     {
-        return $request->headers->has('AUTHORIZATION') && str_starts_with($request->headers->get('AUTHORIZATION'), 'Bearer ');
+        if (!$request->headers->has('AUTHORIZATION')) {
+            return false;
+        }
+
+        return str_starts_with($request->headers->get('AUTHORIZATION'), 'Bearer ');
     }
 
     public function authenticate(Request $request): Passport
     {
         try {
             $token = $this->getToken(substr($request->headers->get('AUTHORIZATION'), 7));
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new AuthenticationException($exception->getMessage(), $exception->getCode(), $exception);
         }
 

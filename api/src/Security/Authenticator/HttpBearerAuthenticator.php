@@ -20,7 +20,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
  */
 class HttpBearerAuthenticator extends AbstractBearerAuthenticator
 {
-    private Configuration $configuration;
+    private readonly Configuration $configuration;
 
     public function __construct(UserProviderInterface $userProvider, Configuration $configuration, string $realmName, string $payloadKey, LoggerInterface $logger = null)
     {

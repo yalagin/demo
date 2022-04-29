@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
@@ -94,7 +95,7 @@ class Review
      */
     #[ORM\Column(type: 'datetime', nullable: true)]
     #[Groups(groups: ['review:read', 'review:write'])]
-    public ?\DateTimeInterface $publicationDate = null;
+    public ?DateTimeInterface $publicationDate = null;
 
     public function getId(): ?UuidInterface
     {
@@ -104,9 +105,13 @@ class Review
     public function setBook(?Book $book, bool $updateRelation = true): void
     {
         $this->book = $book;
-        if ($updateRelation && null !== $book) {
-            $book->addReview($this, false);
+        if (!$updateRelation) {
+            return;
         }
+        if (null === $book) {
+            return;
+        }
+        $book->addReview($this, false);
     }
 
     public function getBook(): ?Book

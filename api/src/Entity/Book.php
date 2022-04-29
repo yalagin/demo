@@ -17,6 +17,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
 use App\Filter\ArchivedFilter;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -100,9 +101,9 @@ class Book implements ArchivableInterface
     #[ORM\Column(type: 'date')]
     #[ApiProperty(types: ['https://schema.org/dateCreated'])]
     #[Assert\NotNull]
-    #[Assert\Type(\DateTimeInterface::class)]
+    #[Assert\Type(DateTimeInterface::class)]
     #[Groups(groups: ['book:read'])]
-    public ?\DateTimeInterface $publicationDate = null;
+    public ?DateTimeInterface $publicationDate = null;
 
     /**
      * The book's reviews.
