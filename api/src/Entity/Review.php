@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Annotation\ApiProperty;
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
@@ -18,13 +19,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * A review of an item - for example, of a restaurant, movie, or store.
  *
- * @see http://schema.org/Review Documentation on Schema.org
+ * @see https://schema.org/Review Documentation on Schema.org
  */
 #[ORM\Entity]
 #[ApiResource(
-    iri: 'http://schema.org/Review',
-    mercure: true,
+    types: ['https://schema.org/Review'],
+    normalizationContext: ['groups' => ['review:read']],
     denormalizationContext: ['groups' => ['review:write']],
+    mercure: true,
+)]
+#[ApiResource(
+    uriTemplate: '/books/{id}/reviews',
+    types: ['https://schema.org/Review'],
+    operations: [new GetCollection()],
     normalizationContext: ['groups' => ['review:read']],
     paginationClientItemsPerPage: true,
 )]
@@ -40,7 +47,7 @@ class Review
      * The actual body of the review.
      */
     #[ORM\Column(type: 'text')]
-    #[ApiProperty(iri: 'http://schema.org/reviewBody')]
+    #[ApiProperty(types: ['https://schema.org/reviewBody'])]
     #[Assert\NotBlank]
     #[Groups(groups: ['book:read', 'review:read', 'review:write'])]
     public ?string $body = null;
@@ -69,7 +76,7 @@ class Review
     #[ORM\ManyToOne(targetEntity: Book::class, inversedBy: 'reviews')]
     #[ORM\JoinColumn(nullable: false)]
     #[ApiFilter(SearchFilter::class)]
-    #[ApiProperty(iri: 'http://schema.org/itemReviewed')]
+    #[ApiProperty(types: ['https://schema.org/itemReviewed'])]
     #[Assert\NotNull]
     #[Groups(groups: ['review:read', 'review:write'])]
     private ?Book $book = null;
@@ -78,7 +85,7 @@ class Review
      * The author of the review.
      */
     #[ORM\Column(type: 'text', nullable: true)]
-    #[ApiProperty(iri: 'http://schema.org/author')]
+    #[ApiProperty(types: ['https://schema.org/author'])]
     #[Groups(groups: ['review:read', 'review:write'])]
     public ?string $author = null;
 

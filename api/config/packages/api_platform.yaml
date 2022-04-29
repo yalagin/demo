@@ -1,4 +1,5 @@
 api_platform:
+    metadata_backward_compatibility_layer: false
     title: API Platform's demo
     version: 1.0.0
     description: |

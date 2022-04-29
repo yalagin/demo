@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filter;
 
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\FilterInterface;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use ApiPlatform\Doctrine\Orm\Filter\FilterInterface;
+use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use App\Entity\ArchivableInterface;
 use Doctrine\ORM\QueryBuilder;
 
