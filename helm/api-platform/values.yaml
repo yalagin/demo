@@ -67,9 +67,40 @@ postgresql:
       memory: 50Mi
       cpu: 50m
 
+# Full configuration: https://github.com/bitnami/charts/tree/master/bitnami/postgresql
+postgresql-keycloak:
+  enabled: true
+  # If bringing your own PostgreSQL, the full uri to use
+  url: postgresql://api-platform:!ChangeMe!@database:5432/api?serverVersion=13&charset=utf8
+  postgresqlUsername: "keycloak"
+  postgresqlPassword: "!ChangeMe!"
+  postgresqlDatabase: "keycloak"
+  # Persistent Volume Storage configuration.
+  # ref: https://kubernetes.io/docs/user-guide/persistent-volumes
+  persistence:
+    enabled: true
+    storageClass: standard
+    size: 1Gi
+  pullPolicy: IfNotPresent
+  image:
+    repository: bitnami/postgresql
+    tag: 13
+  resources:
+    requests:
+      memory: 50Mi
+      cpu: 50m
+
 # Full configuration: https://github.com/bitnami/charts/tree/master/bitnami/keycloak
 keycloak:
   enabled: true
+  postgresql:
+    enabled: false
+  externalDatabase:
+    host: postgresql-keycloak
+    port: 5432
+    user: "keycloak"
+    password: "!ChangeMe!"
+    database: "keycloak"
   image:
     registry: docker.io
     pullPolicy: IfNotPresent
@@ -77,8 +108,8 @@ keycloak:
     tag: 16.1.1-debian-10-r36
   auth:
     createAdminUser: true
-    adminUser: user
-    adminPassword: ""
+    adminUser: admin
+    adminPassword: "!ChangeMe!"
 
 external-dns:
   enabled: true
