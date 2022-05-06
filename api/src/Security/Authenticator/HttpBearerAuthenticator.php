@@ -6,6 +6,7 @@ namespace App\Security\Authenticator;
 
 use App\Security\Authenticator\Passport\Badge\SignedTokenBadge;
 use App\Security\Authenticator\Passport\Badge\TokenBadge;
+use App\Security\TokenExtractor\BearerTokenExtractorInterface;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Token;
 use Psr\Log\LoggerInterface;
@@ -22,9 +23,9 @@ class HttpBearerAuthenticator extends AbstractBearerAuthenticator
 {
     private readonly Configuration $configuration;
 
-    public function __construct(UserProviderInterface $userProvider, Configuration $configuration, string $realmName, string $payloadKey, LoggerInterface $logger = null)
+    public function __construct(UserProviderInterface $userProvider, BearerTokenExtractorInterface $tokenExtractor, Configuration $configuration, string $realmName, string $payloadKey, LoggerInterface $logger = null)
     {
-        parent::__construct($userProvider, $realmName, $payloadKey, $logger);
+        parent::__construct($userProvider, $tokenExtractor, $realmName, $payloadKey, $logger);
 
         $this->configuration = $configuration;
     }

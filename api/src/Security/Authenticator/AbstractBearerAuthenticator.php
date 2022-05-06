@@ -6,6 +6,7 @@ namespace App\Security\Authenticator;
 
 use App\Security\Authenticator\Passport\Badge\TokenBadge;
 use App\Security\Authenticator\Passport\TokenPassport;
+use App\Security\TokenExtractor\BearerTokenExtractorInterface;
 use Exception;
 use Lcobucci\JWT\Token;
 use Psr\Log\LoggerInterface;
@@ -27,6 +28,8 @@ abstract class AbstractBearerAuthenticator implements AuthenticatorInterface, Au
 {
     protected UserProviderInterface $userProvider;
 
+    protected BearerTokenExtractorInterface $tokenExtractor;
+
     protected string $realmName;
 
     protected string $payloadKey;
@@ -34,16 +37,18 @@ abstract class AbstractBearerAuthenticator implements AuthenticatorInterface, Au
     protected LoggerInterface $logger;
 
     public function __construct(
-        UserProviderInterface $userProvider,
-        string $realmName,
-        string $payloadKey,
-        LoggerInterface $logger = null
+        UserProviderInterface         $userProvider,
+        BearerTokenExtractorInterface $tokenExtractor,
+        string                        $realmName,
+        string                        $payloadKey,
+        LoggerInterface               $logger = null
     ) {
         if (!interface_exists(Token::class)) {
             throw new RuntimeException(sprintf('%s requires lcobucci/jwt, please run "composer require lcobucci/jwt" to install it.', self::class));
         }
 
         $this->userProvider = $userProvider;
+        $this->tokenExtractor = $tokenExtractor;
         $this->realmName = $realmName;
         $this->payloadKey = $payloadKey;
         $this->logger = $logger;
@@ -60,17 +65,13 @@ abstract class AbstractBearerAuthenticator implements AuthenticatorInterface, Au
 
     public function supports(Request $request): ?bool
     {
-        if (!$request->headers->has('AUTHORIZATION')) {
-            return false;
-        }
-
-        return str_starts_with($request->headers->get('AUTHORIZATION'), 'Bearer ');
+        return $this->tokenExtractor->supports($request);
     }
 
     public function authenticate(Request $request): Passport
     {
         try {
-            $token = $this->getToken(substr($request->headers->get('AUTHORIZATION'), 7));
+            $token = $this->getToken($this->tokenExtractor->extract($request));
         } catch (Exception $exception) {
             throw new AuthenticationException($exception->getMessage(), $exception->getCode(), $exception);
         }
@@ -98,7 +99,7 @@ abstract class AbstractBearerAuthenticator implements AuthenticatorInterface, Au
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         if (null !== $this->logger) {
-            $this->logger->info('Bearer authentication failed for token.', ['token' => $request->headers->get('AUTHORIZATION'), 'exception' => $exception]);
+            $this->logger->info('Bearer authentication failed for token.', ['token' => $this->tokenExtractor->extract($request), 'exception' => $exception]);
         }
 
         return $this->start($request, $exception);

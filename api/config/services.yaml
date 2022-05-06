@@ -13,6 +13,11 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    # this config only applies to the services created by this file
+    _instanceof:
+        # services whose classes are instances of CustomInterface will be tagged automatically
+        App\Security\TokenExtractor\BearerTokenExtractorInterface:
+            tags: ['app.security.token_extractor']
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -62,3 +67,10 @@ services:
         arguments:
             $realmName: '%env(OAUTH_REALM)%'
             $payloadKey: email
+
+    App\Security\TokenExtractor\BearerTokenExtractorInterface: '@App\Security\TokenExtractor\BearerTokenExtractor'
+
+    App\Security\TokenExtractor\BearerTokenExtractor:
+        autoconfigure: false
+        arguments:
+            $extractors: !tagged_iterator app.security.token_extractor
