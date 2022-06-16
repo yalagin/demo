@@ -6,6 +6,7 @@ namespace App\Filter;
 
 use ApiPlatform\Doctrine\Orm\Filter\FilterInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use ApiPlatform\Metadata\Operation;
 use App\Entity\ArchivableInterface;
 use Doctrine\ORM\QueryBuilder;
 use InvalidArgumentException;
@@ -20,7 +21,7 @@ final class ArchivedFilter implements FilterInterface
     /**
      * @param array<string, mixed> $context
      */
-    public function apply(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null, array $context = []): void
+    public function apply(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, Operation $operation = null, array $context = [])
     {
         if (!is_a($resourceClass, ArchivableInterface::class, true)) {
             throw new InvalidArgumentException(sprintf('Can\'t apply the Archived filter on a resource (%s) not implementing the ArchivableInterface.', $resourceClass));

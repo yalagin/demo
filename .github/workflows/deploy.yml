@@ -98,6 +98,7 @@ jobs:
             --create-namespace \
             --namespace=${{ inputs.namespace }} \
             --set=app.version=${{ github.sha }} \
+            --set=keycloak.externalDatabase.host=${{ inputs.namespace }}-postgres-keycloak \
             --set=php.image.repository=eu.gcr.io/${{ secrets.gke-project }}/php \
             --set=php.image.tag=${{ inputs.docker-images-version }} \
             --set=php.image.pullPolicy=Always \
